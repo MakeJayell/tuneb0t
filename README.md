@@ -11,4 +11,11 @@ The output audio is then given a randomly generated name and uploaded to a Sound
 
 Once the upload is complete tuneb0t will send a tweet via the twitter API containing the URL of the uploaded SoundCloud file.
 
+###To Do
+
+Random phrasing instead of programmed
+Pyo or equivilent for random effect processing
+
+
+
 ####Enjoy~~
