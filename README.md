@@ -5,7 +5,7 @@ a robot making music and sharing it with the world
 
 ###What?
 
-tuneb0t takes random loops from directories and combines them together with correct 4/4 musical phrasing to produce a dynamic song. The larger your loop directory, the more random the resulting mp3 (obviously)
+tuneb0t takes random loops from directories and combines them together with correct 4/4 musical phrasing to produce a dynamic song. The larger your loop library, the more random the resulting mp3 (obviously)
 
 The output audio is then given a randomly generated name, uploaded to a SoundCloud account along with a random image pulled from the Flickr API and 'glitched' using The Art & Science of Whatever's Image Glitch script.
 
