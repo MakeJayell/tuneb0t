@@ -14,6 +14,6 @@ Once the upload is complete tuneb0t will send a tweet via the twitter API contai
 
 ###Uses?
 
--Enjoy an endless supply of randomly generated songs
--Let tuneb0t DJ for you
--Other stuff
+*Enjoy an endless supply of randomly generated songs
+*Let tuneb0t DJ for you
+*Other stuff
