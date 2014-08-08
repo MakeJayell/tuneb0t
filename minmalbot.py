@@ -63,33 +63,6 @@ while extension(random4) != ".mp3":
 
 else: random4obj = AudioSegment.from_mp3(os.path.join(str(sound4), random4))
 
-random5 = random.choice(os.listdir(sound5))
-
-while extension(random5) != ".mp3":
-	random5 = random.choice(os.listdir(sound5))
-
-else: random5obj = AudioSegment.from_mp3(os.path.join(str(sound5), random5))
-
-random6 = random.choice(os.listdir(sound6))
-
-while extension(random6) != ".mp3":
-	random4 = random.choice(os.listdir(sound6))
-
-else: random6obj = AudioSegment.from_mp3(os.path.join(str(sound6), random6))
-
-random7 = random.choice(os.listdir(sound7))
-
-while extension(random7) != ".mp3":
-	random7 = random.choice(os.listdir(sound7))
-
-else: random7obj = AudioSegment.from_mp3(os.path.join(str(sound7), random7))
-
-random7 = random.choice(os.listdir(sound8))
-
-while extension(random8) != ".mp3":
-	random8 = random.choice(os.listdir(sound8))
-
-else: random8obj = AudioSegment.from_mp3(os.path.join(str(sound8), random8))
 
 
 #Once the random filename has been selected above, actually load it as an audio segment from the relevant folder
@@ -111,8 +84,6 @@ print(random4)
 onebeat = 60 / 125
 bar = onebeat * 4
 beatms = bar * 1000
-print(onebeat)
-print(bar)
 
 #generate blocks of silence
 
@@ -136,9 +107,7 @@ fourtybar= beatms * 40
 combined1 = random1obj.overlay(random2obj * 32, position=fourbar) #WHY DOESNT THIS WORK??!!?
 combined2 = combined1.overlay(random3obj * 32, position=eightbar) 
 combined3 = combined2.overlay(random4obj * 32, position=sixteenbar)
-combined4 = combined3.overlay(random5obj * 32, position=twentyfourbar)
-combined5 = combined4.overlay(random6obj * 32, position=thirtytwobar)
-combined6 = combined5.overlay(random7obj * 32, position=fourtybar)
+combinedfinal = combined3 * 2
 
 #Generate the random title of the track and the variables to use later i.e. the finaltitlefortweet
 #NEED TO FIX, THIS OCCASIONALLY ONLY GRABS ONE WORD INSTEAD OF TWO
@@ -159,16 +128,15 @@ adjective = random.choice(finaladjective)
 finaltitle = adjective.decode() + ' ' + word.decode()
 finaltitlefortweet = adjective.decode() + '-' + word.decode()
 
-print('OK! Just uploaded ' + finaltitle)
-
 #Export the final combined file
-combined3.export("truerandom1.mp3", format='mp3')
+combinedfinal.export(finaltitle, format='mp3')
 
 
 #~~~~~~~~~~IMAGE GEN~~~~~~~~~~~#
 
-#import glitch
-#glitch.main()
+import glitch
+theglitcher = glitch.Glitch()
+theglitcher.trigger(None, keyword=adjective,finalfilename= finaltitle + '.jpg')
 
 
 #~~~~~~~~~~SOUNDCLOUD~~~~~~~~~~#
@@ -188,11 +156,12 @@ track = client.post('/tracks', track={
     'sharing': 'private',
     'genre' : 'Electronic',
     'tag_list' : 'Robot Dynamic Python Loops Random minimal',
-    'asset_data': open('truerandom1.mp3', 'rb')
+    'asset_data': open(finaltitle, 'rb'),
+    'artwork_data': open(finaltitle + '.jpg', 'rb')
 })
 
 
-
+print('OK! Just uploaded ' + finaltitle)
 
 #~~~~~~~~~~TWITTER~~~~~~~~~~#
 
@@ -212,5 +181,4 @@ twitter = Twython(APP_KEY, APP_SECRET,
 
 #Build and post the actual tweet containing the URL to the track on SoundCloud
 #IS THERE A TIDIER WAY TO DO THIS I.E. USING SOUNDCLOUDS RESOLVE(?) FUNCTION?
-twitter.update_status(status='tuneb0t made a tune : https://soundcloud.com/une0t/' + finaltitlefortweet)
-
+twitter.update_status(status='tuneb0t made a tune : ' + track.permalink_url)

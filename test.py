@@ -136,19 +136,18 @@ word = random.choice(finalword)
 adjective = random.choice(finaladjective)
 
 finaltitle = adjective.decode() + ' ' + word.decode()
-finaltitlefortweet = adjective.decode() + '-' + word.decode()
 
 print('OK! Just uploaded ' + finaltitle)
 
 #Export the final combined file
-combined3.export("truerandom1.mp3", format='mp3')
+combined3.export(finaltitle, format='mp3')
 
 
 #~~~~~~~~~~IMAGE GEN~~~~~~~~~~~#
 
-#import glitch
-#glitch.main()
-
+import glitch
+theglitcher = glitch.Glitch()
+theglitcher.trigger(None, keyword=adjective,finalfilename= finaltitle + '.jpg')
 
 #~~~~~~~~~~SOUNDCLOUD~~~~~~~~~~#
 
@@ -167,9 +166,9 @@ track = client.post('/tracks', track={
     'sharing': 'private',
     'genre' : 'Electronic',
     'tag_list' : 'Robot Dynamic Python Loops Random',
-    'asset_data': open('truerandom1.mp3', 'rb')
+    'asset_data': open('truerandom1.mp3', 'rb'),
+    'artwork_data': open(finaltitle + '.jpg', 'rb')
 })
-
 
 
 
@@ -191,5 +190,5 @@ twitter = Twython(APP_KEY, APP_SECRET,
 
 #Build and post the actual tweet containing the URL to the track on SoundCloud
 #IS THERE A TIDIER WAY TO DO THIS I.E. USING SOUNDCLOUDS RESOLVE(?) FUNCTION?
-twitter.update_status(status='tuneb0t made a tune : https://soundcloud.com/une0t/' + finaltitlefortweet)
+twitter.update_status(status='tuneb0t made a tune : ' + track.permalink_url)
 
