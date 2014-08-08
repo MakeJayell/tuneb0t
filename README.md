@@ -14,6 +14,7 @@ Once the upload is complete tuneb0t will send a tweet via the twitter API contai
 ###To Do
 
 Random phrasing instead of programmed
+
 Pyo or equivilent for random effect processing
 
 
