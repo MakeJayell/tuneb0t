@@ -3,7 +3,7 @@ tuneb0t
 
 a robot making music and sharing it with the world
 
-##What?
+###What?
 
 tuneb0t takes random loops from directories and combines them together with correct 4/4 musical phrasing to produce a dynamic song. The larger your loop directory, the more random the resulting mp3 (obviously)
 
