@@ -52,17 +52,7 @@ for count, (instrument, path) in enumerate(soundstore.items()):
 
 
 
-#define the random variables above as sounds
-#soundx = AudioSegment.from_mp3(random1)
-#soundy = AudioSegment.from_mp3(random2)
-
-#print(random.choice(sound3)) - These both work and randomly print the names of the sounds
-#print(random.choice(sound4))
-
-
-
 #generate blocks of silence
-
 bar_of_silence = AudioSegment.silent(duration=beatms) # or be explicit
 phrase_of_silence = bar_of_silence * 4
 
@@ -144,6 +134,5 @@ twitter = Twython(APP_KEY, APP_SECRET,
                   OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
 
 
-#Build and post the actual tweet containing the URL to the track on SoundCloud
-#IS THERE A TIDIER WAY TO DO THIS I.E. USING SOUNDCLOUDS RESOLVE(?) FUNCTION?
+#Update twitter status
 twitter.update_status(status='tuneb0t made a tune : ' + track.permalink_url)
