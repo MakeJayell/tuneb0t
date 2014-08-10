@@ -21,14 +21,13 @@ import configparser
 config = configparser.ConfigParser()
 config.read('user.config')
 
-
 __author__ = "Steve Ed Alan > http://www.twitter.com/artofwhatever"
 __copyright__ = "Copyright 2013, The Art & Science of Whatever > http://www.artofwhatever.com"
 __license__ = "MIT"
 __version__ = "1.0"
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(name)s [%(levelname)s]: %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(name)s [%(levelname)s]: %(message)s')
 logger = logging.getLogger("The Art & Science of Whatever::Image Glitch")
 
 API_KEY = config['FLICKR CONFIG']['API_KEY']
@@ -48,7 +47,7 @@ class Glitch(object):
         keyword_search_parameters = {
             'method'    : 'flickr.photos.search',
             'api_key'   : API_KEY,
-            'text'      : 'keyword',
+            'text'      : keyword,
             'sort'      : 'relevance',
             'format'    : 'rest'
         }
@@ -121,7 +120,7 @@ class Glitch(object):
     #     img.save(imgfile, "jpeg")
     #     return imgfile
 
-    def glitch_an_image(self, local_image):
+    def glitch_an_image(self, local_image, finalfilename):
         """ Glitch!
 
         * Opens the original image file, reads its contents and stores them as 'file_data'
@@ -139,7 +138,11 @@ class Glitch(object):
         for i in range(1, random.randint(2, 6)):
             file_data = self.splice_a_chunk_in_a_file(file_data)
 
-        with open(self.append_random_number_to_filename(local_image), 'wb') as glitch_file_handler:
+        #Use a random filename if none has been provided
+        if not finalfilename:
+        	finalfilename = self.append_random_number_to_filename(local_image)
+
+        with open(finalfilename, 'wb') as glitch_file_handler:
             glitch_file_handler.write(file_data)
 
         return local_image
@@ -148,12 +151,12 @@ class Glitch(object):
         """ Prevent overwriting of original file """
         return "%s-%s-glitched.%s" % (local_img_file.split(".")[0], random.randint(100, 999), local_img_file.split(".")[1])
 
-    def trigger(self, local_img_file, keyword):
+    def trigger(self, local_img_file, keyword, finalfilename=None):
         """ Main trigger function """
         if not local_img_file:
             image_url = self.get_flickr_image(keyword)
             local_img_file = self.download_an_image(image_url)
-        image_glitch_file = self.glitch_an_image(local_img_file)
+        image_glitch_file = self.glitch_an_image(local_img_file, finalfilename)
         logger.info("Finished glitching %s" % image_glitch_file)
 
 
@@ -173,12 +176,19 @@ def main():
         default="random",
         metavar="keyword",
     )
+    parser.add_argument(
+        "-n", "--outputfilename",
+        dest="outputfilename",
+        help="Filename for glitched image.",
+        default="None",
+        metavar="output",
+    )
 
     args = parser.parse_args()
 
     # Start the glitch script
     glitch = Glitch()
-    glitch.trigger(args.local_img_file, args.keyword)
+    glitch.trigger(args.local_img_file, args.keyword, args.outputfilename)
 
 if __name__ == '__main__':
     main()
