@@ -17,61 +17,40 @@ import random
 #sound3 = ['drums.mp3', 'piano.mp3']
 #sound4 = ['lead.mp3', 'chip.mp3']
 
+#tempo to milliseconds conversion
+onebeat = 60 / 125
+bar = onebeat * 4
+beatms = bar * 1000
+
+
 import os, sys
 
 def extension(file):
     ext = os.path.splitext(file)[-1].lower()
     return ext
 
-#define the directories
-sound1 = "/Users/jake/documents/tunebot/sound1"
-sound2 = "/Users/jake/documents/tunebot/sound2"
-sound3 = "/Users/jake/documents/tunebot/sound3"
-sound4 = "/Users/jake/documents/tunebot/sound4"
+soundstore = {
+    "loop1" : "/Users/jake/documents/tunebot/sound1",
+    "loop2" : "/Users/jake/documents/tunebot/sound2",
+    "loop3" : "/Users/jake/documents/tunebot/sound3",
+    "loop4" : "/Users/jake/documents/tunebot/sound4"
+}
+ 
+#if they are .mp3s continue as normal, if not re-select a file
+for count, (instrument, path) in enumerate(soundstore.items()):
+    print("Randomly choosing a %s track" % instrument)
+    random_track = random.choice(os.listdir(path))
+    while extension(random_track) != ".mp3":
+        random_track = random.choice(os.listdir(path))
+    else: 
+        randomobj = AudioSegment.from_mp3(os.path.join(str(path), random_track)) * 8
+ 
+    if count == 0:
+      mix = randomobj
+    else:
+      mix = mix.overlay(randomobj, position=(beatms * 4) )
 
 
-#Randomly select the files
-random1 = random.choice(os.listdir(sound1))
-
-#if they are .mp3s continue as normal, if not re-select a file - make this a function to use for each sound later
-while extension(random1) != ".mp3":
-	random1 = random.choice(os.listdir(sound1))
-
-else: random1obj = AudioSegment.from_mp3(os.path.join(str(sound1), random1)) * 8
-
-
-random2 = random.choice(os.listdir(sound2))
-
-while extension(random2) != ".mp3":
-	random2 = random.choice(os.listdir(sound2))
-
-else: random2obj = AudioSegment.from_mp3(os.path.join(str(sound2), random2))
-
-
-random3 = random.choice(os.listdir(sound3))
-
-while extension(random3) != ".mp3":
-	random3 = random.choice(os.listdir(sound3))
-
-else: random3obj = AudioSegment.from_mp3(os.path.join(str(sound3), random3))
-
-
-random4 = random.choice(os.listdir(sound4))
-
-while extension(random4) != ".mp3":
-	random4 = random.choice(os.listdir(sound4))
-
-else: random4obj = AudioSegment.from_mp3(os.path.join(str(sound4), random4))
-
-
-
-#Once the random filename has been selected above, actually load it as an audio segment from the relevant folder
-
-#Print names of files. Just to test
-print(random1)
-print(random2)
-print(random3)
-print(random4)
 
 #define the random variables above as sounds
 #soundx = AudioSegment.from_mp3(random1)
@@ -80,10 +59,7 @@ print(random4)
 #print(random.choice(sound3)) - These both work and randomly print the names of the sounds
 #print(random.choice(sound4))
 
-#tempo to milliseconds conversion
-onebeat = 60 / 125
-bar = onebeat * 4
-beatms = bar * 1000
+
 
 #generate blocks of silence
 
@@ -97,17 +73,6 @@ sixteenbar = beatms * 16
 twentyfourbar = beatms * 24
 thirtytwobar = beatms * 32
 fourtybar= beatms * 40
-
-#intro = random1obj
-#verse = random2obj
-
-
-#Combine the two files
-
-combined1 = random1obj.overlay(random2obj * 32, position=fourbar) #WHY DOESNT THIS WORK??!!?
-combined2 = combined1.overlay(random3obj * 32, position=eightbar) 
-combined3 = combined2.overlay(random4obj * 32, position=sixteenbar)
-combinedfinal = combined3 * 2
 
 #Generate the random title of the track and the variables to use later i.e. the finaltitlefortweet
 #NEED TO FIX, THIS OCCASIONALLY ONLY GRABS ONE WORD INSTEAD OF TWO
@@ -129,7 +94,7 @@ finaltitle = adjective.decode() + ' ' + word.decode()
 finaltitlefortweet = adjective.decode() + '-' + word.decode()
 
 #Export the final combined file
-combinedfinal.export(finaltitle, format='mp3')
+mix.export(finaltitle + ".mp3", format='mp3')
 
 
 #~~~~~~~~~~IMAGE GEN~~~~~~~~~~~#
@@ -156,7 +121,7 @@ track = client.post('/tracks', track={
     'sharing': 'private',
     'genre' : 'Electronic',
     'tag_list' : 'Robot Dynamic Python Loops Random minimal',
-    'asset_data': open(finaltitle, 'rb'),
+    'asset_data': open(finaltitle + ".mp3", 'rb'),
     'artwork_data': open(finaltitle + '.jpg', 'rb')
 })
 
