@@ -1,21 +1,7 @@
 
 
 from pydub import AudioSegment
-
-
-#sound1 = AudioSegment.from_file("drums.mp3")
-#sound2 = AudioSegment.from_file("piano.mp3")
-
-#combined = sound1.overlay(sound2) - this works.
-
-#combined.export("finalsong.mp3", format='mp3') - this works.
-
-# Try to do the above but by defining the 'sound' variables randomly :
-
 import random
-
-#sound3 = ['drums.mp3', 'piano.mp3']
-#sound4 = ['lead.mp3', 'chip.mp3']
 
 #tempo to milliseconds conversion
 onebeat = 60 / 125
