@@ -34,7 +34,7 @@ for count, (instrument, path) in enumerate(soundstore.items()):
     if count == 0:
       mix = randomobj
     else:
-      mix = mix.overlay(randomobj, position=(beatms * 4) )
+      mix = mix.overlay(randomobj, position=(beatms * (count * 4)) )
 
 
 
