@@ -26,7 +26,7 @@ soundstore = {
 for count, (instrument, path) in enumerate(soundstore.items()):
     print("Randomly choosing a %s track" % instrument)
     random_track = random.choice(os.listdir(path))
-    while extension(random_track) != ".mp3":
+    while extension(random_track) is not ".mp3":
         random_track = random.choice(os.listdir(path))
     else: 
         randomobj = AudioSegment.from_mp3(os.path.join(str(path), random_track)) * 8
@@ -34,7 +34,7 @@ for count, (instrument, path) in enumerate(soundstore.items()):
     if count == 0:
       mix = randomobj
     else:
-      mix = mix.overlay(randomobj, position=(beatms * 4) )
+      mix = mix.overlay(randomobj, position=(beatms * (count * 4)) )
 
 
 
